@@ -1,6 +1,6 @@
 ## REQUIRE REGRESSION_PLOT FUNCTIONS FOR NESTE MAPPED LA ANALYSES AND GRAPHICING
 #source('regression_plot.R')
-if(!exists('regression_main_significant')) source('https://raw.githubusercontent.com/umontano/regression/refs/heads/main/sig_graph.R')
+if(!exists('regression_significant_main')) source('https://raw.githubusercontent.com/umontano/regression/refs/heads/main/sig_graph.R')
 
 ## LOAD CSV DATABASE
 if(!exists('o433_df')) o433_df <- read.csv('https://raw.githubusercontent.com/umontano/oros/refs/heads/main/o433.csv')[-1]
@@ -29,20 +29,20 @@ lapply(varnames_groupping, \(each_gv) orecoded_df[[each_gv]] <<- as.factor(o433_
 
 
 ## TESTING SCATTER PLOTS OF CATEGORICAL GROUPPING VARIABLES VERSUS ONLY ITEMS
-main_results <- regression_main_significant(orecoded_df, varnames_orositems, varnames_groupping, significance_threshold = 0.05, r_min_threshold = 0.02, make_graphics = TRUE, transparency = 0.3, save_graph_to = 'zgroup_items_scatter_o433.pdf', scatter_cats = TRUE)
+main_results <- regression_significant_main(orecoded_df, varnames_orositems, varnames_groupping, significance_threshold = 0.05, r_min_threshold = 0.02, make_graphics = TRUE, transparency = 0.3, save_graph_to = 'zgroup_items_scatter_o433.pdf', scatter_cats = TRUE)
 
 ## NUMERIC VARIABLES VS IQ 
-main_results <- regression_main_significant(o433_df, varnames_iq, varnames_pred, significance_threshold = 0.05, r_min_threshold = 0.05, make_graphics = TRUE, transparency = 0.4, save_graph_to = 'z2corrs_o433.pdf', scatter_cats = FALSE)
+main_results <- regression_significant_main(o433_df, varnames_iq, varnames_pred, significance_threshold = 0.05, r_min_threshold = 0.05, make_graphics = TRUE, transparency = 0.4, save_graph_to = 'z2corrs_o433.pdf', scatter_cats = FALSE)
 
 ## DIFFERENCES BY IQ 128 GROUP
-main_results <- regression_main_significant(orecoded_df, joint_nums, c('iq_g_128'), significance_threshold = 0.05, r_min_threshold = 0.001, make_graphics = T, transparency = 0.5, save_graph_to = 'ziq128_o433.pdf', scatter_cats = FALSE)
+main_results <- regression_significant_main(orecoded_df, joint_nums, c('iq_g_128'), significance_threshold = 0.05, r_min_threshold = 0.001, make_graphics = T, transparency = 0.5, save_graph_to = 'ziq128_o433.pdf', scatter_cats = FALSE)
 main_results$significants |> length() |> print()
 
 ## ANALYSIS by SEX AND NATIONALITY ONLY
-main_results <- regression_main_significant(orecoded_df, joint_nums, c('Sexo.', 'Nacionalidad'), significance_threshold = 0.05, r_min_threshold = 0.005, make_graphics = T, transparency = 0.5, save_graph_to = 'zsex_nac_o433.pdf', scatter_cats = FALSE)
+main_results <- regression_significant_main(orecoded_df, joint_nums, c('Sexo.', 'Nacionalidad'), significance_threshold = 0.05, r_min_threshold = 0.005, make_graphics = T, transparency = 0.5, save_graph_to = 'zsex_nac_o433.pdf', scatter_cats = FALSE)
 
 ## DIFFERENCES IN NUMERIC VARIABLES BY ALL GROUPPING VARIABLES WITH R GREATER THAT 0.025
-main_results <- regression_main_significant(orecoded_df, joint_nums, varnames_groupping, significance_threshold = 0.05, r_min_threshold = 0.025, make_graphics = TRUE, transparency = 0.5, save_graph_to = 'z025_diffs_o433.pdf', scatter_cats = FALSE)
+main_results <- regression_significant_main(orecoded_df, joint_nums, varnames_groupping, significance_threshold = 0.05, r_min_threshold = 0.025, make_graphics = TRUE, transparency = 0.5, save_graph_to = 'z025_diffs_o433.pdf', scatter_cats = FALSE)
 
 main_results$significants |> length() |> print()
 
