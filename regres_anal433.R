@@ -1,6 +1,6 @@
 ## REQUIRE REGRESSION_PLOT FUNCTIONS FOR NESTE MAPPED LA ANALYSES AND GRAPHICING
 #source('regression_plot.R')
-if(!exists('regression_main_significant') source('https://raw.githubusercontent.com/umontano/regression/refs/heads/main/sig_graph.R')
+if(!exists('regression_main_significant')) source('https://raw.githubusercontent.com/umontano/regression/refs/heads/main/sig_graph.R')
 
 ## LOAD CSV DATABASE
 if(!exists('o433_df')) o433_df <- read.csv('https://raw.githubusercontent.com/umontano/oros/refs/heads/main/o433.csv')[-1]
