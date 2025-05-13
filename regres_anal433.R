@@ -28,6 +28,9 @@ lapply(varnames_groupping, \(each_gv) orecoded_df[[each_gv]] <<- as.factor(o433_
 #pvalues_matrix <- mapped_analyze_multiple_nested_significat_lm(o433_df, names(o433_df), names(o433_df), significance_threshold = 0.05, r_min_threshold = 0.358)
 
 
+## TESTING SCATTER PLOTS OF CATEGORICAL GROUPPING VARIABLES VERSUS ONLY ITEMS
+main_results <- regression_main_significant(orecoded_df, varnames_orositems, varnames_groupping, significance_threshold = 0.05, r_min_threshold = 0.02, make_graphics = TRUE, transparency = 0.3, save_graph_to = 'zgroup_items_scatter_o433.pdf', scatter_cats = TRUE)
+
 ## NUMERIC VARIABLES VS IQ 
 main_results <- regression_main_significant(o433_df, varnames_iq, varnames_pred, significance_threshold = 0.05, r_min_threshold = 0.05, make_graphics = TRUE, transparency = 0.4, save_graph_to = 'z2corrs_o433.pdf', scatter_cats = FALSE)
 
