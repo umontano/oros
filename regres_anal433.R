@@ -6,11 +6,12 @@ if(!exists('regression_main_significant')) source('https://raw.githubusercontent
 if(!exists('o433_df')) o433_df <- read.csv('https://raw.githubusercontent.com/umontano/oros/refs/heads/main/o433.csv')[-1]
 
 ## COMPUTE NAMES VECTOR
+varnames_pred          <- grep('^[^C].*otal|Grit|erfe|^(PA\\d|PSP\\d|POO\\d)' , names(o433_df), value = TRUE)
+varnames_pred_no_items <- grep('^[^C].*otal|Grit|erfe', names(o433_df), value = TRUE)
 varnames_iq <- grep('CI', names(o433_df), value = TRUE)
-varnames_pred <- grep('^[^C].*otal|Grit|erfe|^(PA\\d|PSP\\d|POO\\d)' , names(o433_df), value = TRUE)
+varnames_orositems <- grep('^P\\w+\\d+$', names(o433_df), value = TRUE, perl = TRUE)
 
 varnames_groupping <- grep('Sexo|iq_|Col|locatio|Nacional', names(o433_df), value = TRUE)
-varnames_groupping
 
 rm(orecoded_df, joint_nums)
 ## MAKE THE GROUPPING VARIABLES FACTOR
