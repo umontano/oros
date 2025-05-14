@@ -29,10 +29,10 @@ lapply(varnames_groupping, \(each_gv) orecoded_df[[each_gv]] <<- as.factor(o433_
 
 
 ## TESTING SCATTER PLOTS OF CATEGORICAL GROUPPING VARIABLES VERSUS ONLY ITEMS
-main_results <- regression_significant_main(orecoded_df, varnames_orositems, varnames_groupping, significance_threshold = 0.05, r_min_threshold = 0.02, make_graphics = TRUE, transparency = 0.3, save_graph_to = 'zgroup_items_scatter_o433.pdf', scatter_cats = TRUE)
+res_cats_items <- regression_significant_main(orecoded_df, varnames_orositems, varnames_groupping, significance_threshold = 0.05, r_min_threshold = 0.02, make_graphics = TRUE, transparency = 0.3, save_graph_to = 'zgroup_items_scatter_o433.pdf', scatter_cats = TRUE)
 
 ## NUMERIC VARIABLES VS IQ 
-main_results <- regression_significant_main(o433_df, varnames_iq, varnames_pred, significance_threshold = 0.05, r_min_threshold = 0.05, make_graphics = TRUE, transparency = 0.4, save_graph_to = 'z2corrs_o433.pdf', scatter_cats = FALSE)
+res_numericals <- regression_significant_main(o433_df, varnames_iq, varnames_pred, significance_threshold = 0.05, r_min_threshold = 0.05, make_graphics = TRUE, transparency = 0.4, save_graph_to = 'z2corrs_o433.pdf', scatter_cats = FALSE)
 
 ## DIFFERENCES BY IQ 128 GROUP
 main_results <- regression_significant_main(orecoded_df, joint_nums, c('iq_g_128'), significance_threshold = 0.05, r_min_threshold = 0.001, make_graphics = T, transparency = 0.5, save_graph_to = 'ziq128_o433.pdf', scatter_cats = FALSE)
