@@ -27,21 +27,21 @@ lapply(varnames_groupping, \(each_gv) ofactored_df[[each_gv]] <<- as.factor(o433
 ######################################################################################
 # IQ ANALYSES
 ## CORRELATION NUMERIC VARIABLES VS IQ 
-res_iq_corr <- regression_significant_main(o433_df, varnames_iq, varnames_num_predictors, significance_threshold = 0.05, r_min_threshold = 0.05, make_graphics = TRUE, opacity = 0.4, save_graph_to = 'ziq_corrs_o433.pdf', scatter_cats = FALSE)
+res_iq_corr <- regression_significant_main(o433_df, varnames_iq, varnames_num_predictors, significance_threshold = 0.05, r_min_threshold = 0.05, make_graphics = TRUE, opacity = 0.4, save_graph_to = 'o433iq_corrs.pdf', scatter_cats = FALSE)
 
 ## DIFFERENCES BY IQ 128 GROUP.
 #NOTE: 14 DIFFERENCES FOUND.
-res_iq_diff <- regression_significant_main(o433_df, joint_nums, c('iq_g_128', 'iq_g_115', 'iq_g_median'), significance_threshold = 0.05, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.4, save_graph_to = 'ziq_diff_o433.pdf', scatter_cats = FALSE)
+res_iq_diff <- regression_significant_main(o433_df, joint_nums, c('iq_g_128', 'iq_g_115', 'iq_g_median'), significance_threshold = 0.05, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.4, save_graph_to = 'o433iq_diff.pdf', scatter_cats = FALSE)
 
 ## ANALYSIS by SEX AND NATIONALITY ONLY
-main_results <- regression_significant_main(ofactored_df, joint_nums, c('Sexo.', 'Nacionalidad'), significance_threshold = 0.05, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.5, save_graph_to = 'zsex_nac_diff_o433.pdf', scatter_cats = FALSE)
+main_results <- regression_significant_main(ofactored_df, joint_nums, c('Sexo.', 'Nacionalidad'), significance_threshold = 0.05, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.5, save_graph_to = 'o433sex_nac_diff.pdf', scatter_cats = FALSE)
 
 ## DIFFERENCES IN NUMERIC VARIABLES BY ALL GROUPPING VARIABLES WITH R GREATER THAT 0.025
 #NOTE: 35 DIFFERENCES FOUND.
-main_results <- regression_significant_main(ofactored_df, joint_nums, varnames_groupping, significance_threshold = 0.05, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.5, save_graph_to = 'zgroup0_diff_o433.pdf', scatter_cats = FALSE)
+main_results <- regression_significant_main(ofactored_df, joint_nums, varnames_groupping, significance_threshold = 0.05, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.5, save_graph_to = 'o433group0_diff.pdf', scatter_cats = FALSE)
 
 # CORRELATIONS OF NUMERICAL VARIABLE INCLUDING AGE, GRADE AND PARTIAL-TOTALS
-res_corr <- regression_significant_main(o433_df, varnames_num_predictors, varnames_num_predictors, significance_threshold = 0.05, r_min_threshold = 0.5, make_graphics = TRUE, opacity = 0.4, save_graph_to = 'zcorr_totals_o433.pdf', scatter_cats = FALSE)
+res_corr <- regression_significant_main(o433_df, varnames_num_predictors, varnames_num_predictors, significance_threshold = 0.05, r_min_threshold = 0.5, make_graphics = TRUE, opacity = 0.4, save_graph_to = 'o433corr_totals.pdf', scatter_cats = FALSE)
 
 #################################################################
 #################################################################
@@ -49,11 +49,11 @@ res_corr <- regression_significant_main(o433_df, varnames_num_predictors, varnam
 ## ITEM GROUP DIFFERENCES.
 ## ITEM CORRELATION TO NUMERIC VARIABLES, WITH R SQUARED GREATER THAN POINT FIFTEEN. 
 #(note: 16 significant analysis, however at lower r there are up to 50)
-res_items_num <- regression_significant_main(ofactored_df, vn_pred_no_orostotal, varnames_oros_items, significance_threshold = 0.05, r_min_threshold = 0.15, make_graphics = TRUE, opacity = 0.3, save_graph_to = 'zitems_corr_o433.pdf', scatter_cats = FALSE)
+res_items_num <- regression_significant_main(ofactored_df, vn_pred_no_orostotal, varnames_oros_items, significance_threshold = 0.05, r_min_threshold = 0.15, make_graphics = TRUE, opacity = 0.3, save_graph_to = 'o433items_corr.pdf', scatter_cats = FALSE)
 
 ### TESTING SCATTER PLOTS OF CATEGORICAL GROUPPING VARIABLES VERSUS ONLY ITEMS
 #NOTE: 36 DIFFERENCES FOUND
-res_items_cat <- regression_significant_main(ofactored_df, varnames_oros_items, varnames_groupping, significance_threshold = 0.05, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.1, save_graph_to = 'zitems_diff_o433.pdf', scatter_cats = TRUE)
+res_items_cat <- regression_significant_main(ofactored_df, varnames_oros_items, varnames_groupping, significance_threshold = 0.05, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.1, save_graph_to = 'o433items_diff.pdf', scatter_cats = TRUE)
 
 ########################################################################################
 ########################################################################################
