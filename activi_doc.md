@@ -19,5 +19,5 @@ El sufijo aaf_ en todas las variabe indica Ambiente (para) Actividad Fisica.
 | ----------------- | -----------| ------- |
 | aaf_t_sum_total | total aggregated class+recess time  | t_sum = t_class + t_recess    |
 | aaf_ratio_s_pop | space size population size ratio    | ratio_sp = s_size / pop_size     |
-| aaf_indica_rec_t_s_p | product of recess-time times the space/populatioin ratio   | indic_tsp = t_recesss * ratio_sp          |
-| aaf_indica_sum_t_s_p | aggregated time (class+recess) times the space/population ration   | indic_sum_tsp = t_sum * ratio_sp  |
+| aaf_indica_rec_t_s_p | product of recess-time times the space/populatioin ratio   | indica_tsp = t_recesss * ratio_sp          |
+| aaf_indica_sum_t_s_p | aggregated time (class+recess) times the space/population ration   | indica_sum_tsp = t_sum * ratio_sp  |
