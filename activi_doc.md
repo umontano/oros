@@ -6,7 +6,7 @@ El sufijo aaf_ en todas las variabe indica Ambiente (para) Actividad Fisica.
 ## OBSERVED VARIABLES
 | Nombre d Variable | Definicion | Valores |
 | ----------------- | -----------| ------- |
-| aaf_t_pe_class| t Tiempo de educacion fisica          | Minutos por semana |
+| aaf_t_pe_class| t Tiempo en clase de educacion fisica          | Minutos por semana |
 | aaf_t_recess	| t Tiempo de recreo                    | Minutos por semana |
 | aaf_population_size | Tamannho de la poblacion total de la escuela | 1 - 4 = chica, mediana, grande, muy_gr |
 | aaf_s_size	| s Espacio para actividades fisicas.   | 0 - 4 = no_hay, chico, mediano, grande, muy_gr|
