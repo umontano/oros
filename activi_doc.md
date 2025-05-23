@@ -7,12 +7,12 @@ El sufijo aaf_ en todas las variabe indica Ambiente (para) Actividad Fisica.
 | Nombre d Variable | Definicion | Valores |
 | ----------------- | -----------| ------- |
 | aaf_t_pe_class| t Tiempo de educacion fisica          | Minutos por semana |
-| aaf_t_recess	| t tiempo de recreo                    | Minutos por semana |
-| aaf_population_size | tamannho de la poblacion total de la escuela. | 1 a 4 = chica, mediana, grande, muy granade |
-| aaf_s_size	| s espacio para actividades fisicas.   | 0 a 4 = no_hay, chico, mediano, grande, muy grande |
-| aaf_s_avail	| s espacio esta o no disponible        | 0, 1 |
-| aaf_s_used	| s espacio es usado o no               | 0, 1 |
-| aaf_s_shape	| s forma del espacio                   | rectang, triang, irregular, other |
+| aaf_t_recess	| t Tiempo de recreo                    | Minutos por semana |
+| aaf_population_size | Tamannho de la poblacion total de la escuela | 1 - 4 = chica, mediana, grande, muy granade |
+| aaf_s_size	| s Espacio para actividades fisicas.   | 0 - 4 = no_hay, chico, mediano, grande, muy grande |
+| aaf_s_avail	| s Espacio esta o no disponible        | 0, 1 |
+| aaf_s_used	| s Espacio es usado o no               | 0, 1 |
+| aaf_s_shape	| s Forma del espacio                   | rectang, triang, irregular, other |
 
 ## computed variables
 
