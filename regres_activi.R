@@ -2,6 +2,7 @@
 if(!exists('regression_significant_main')) source('https://raw.githubusercontent.com/umontano/regression/refs/heads/main/sig_graph.R')
 ## LOAD CSV DATABASE
 if(!exists('o433_df')) o433_df <- read.csv('https://raw.githubusercontent.com/umontano/oros/refs/heads/main/o433.csv')
+if(!exists('physical_activity_info_df')) physical_activity_info_df <- read.csv('https://github.com/umontano/oros/raw/main/activi.csv', header = TRUE, stringsAsFactors = FALSE, sep = ',')
 
 ## INSTALL LIBRARIES IF NOT INSTALLED, AND LOAD THEM
 packages <- c(
@@ -15,7 +16,7 @@ packages <- c(
 lapply(packages, \(x) if (!require(x, character.only = TRUE)) { install.packages(x)
 	library(x, character.only = TRUE) })
 
-## COMPUTE REMAININ (THE NON-GROUPPING) NAMES VECTORS
+## COMPUTE REMAINING (THE NON-GROUPPING) NAMES VECTORS
 nm <- names(o433_df)
 varnames_groupping <- grep('Edad|Grado|Sexo|Col|locatio|Nacional', nm, value = TRUE)
 varnames_num_no_age_no_grade_predictors <- '^[^C].*otal|Grit|erfe' |> grep(nm, value = TRUE)
@@ -32,29 +33,18 @@ joint_cats <- c(varnames_groupping, varnames_iqgroups)
 ofactored_df <- o433_df['Codigo|X|Promedio' |> grep(names(o433_df), value=T) |> base::setdiff(names(o433_df), y=_)]
 lapply(joint_cats, \(each_gv) ofactored_df[[each_gv]] <<- as.factor(o433_df[[each_gv]]))
 
+
 #######################################################################################
 ######################################################################################
-######################################################################################
-
-## TABLE FOR LOOJING GRADE  IN MEXICAN SCHOOLS
-o433_df |> subset(Nacionalidad == 2, select = c('Grado_Escolar', 'Colegio')) |> table()
-
-## TABLE FOR PIDAHI SECONDARY RATIO
-o433_df |> subset(Nacionalidad == 2 & Colegio == 9, select = c('Grado_Escolar')) |> table()
-
-## TABLE Ciudad_residencia guadalajara
-## NOTE 8 IS SECONDARY GUADALAJARA
-o433_df |> subset(Ciudad_Residencia == 6 & Nacionalidad == 2, select = c('Grado_Escolar', 'Sexo.', 'Colegio')) |> table()
-
-#################################################
-#################################################
-rm(pidahi_t_pe_class_sum_total)
+## PIDAHI PARAMETERS
 pidahi_secondary_percentage <- 0.90
 pidahi_pe_workshop_percentage <- 0.30
 pidahi_t_pe_class_sum_total <- 100*pidahi_secondary_percentage + 120*(1-pidahi_secondary_percentage) + 90*pidahi_pe_workshop_percentage
-rm(lookup_table_info_col, index_df, findee_col, physical_activity_info)
+
 #       #       #       #       #       #       #       #       #       #       #       #       #       #       #       #       
-physical_activity_info <- read.csv(text = "
+## LOAD ACTIVITY LOOKUP TABLE INFORMATION
+#physical_activity_info_df <- read.csv(text =
+dommycsvtext <- "
 school_name, aaf_t_pe_class, aaf_t_recess, aaf_population_size, aaf_s_size
 bicentenario,
 esperanza,
@@ -67,24 +57,27 @@ secguadala,	100,		150,		2,		3
 pidahi,		129,		150,		1,		1
 primcongreso,	120,		150,		3,		2
 "
+#, header = TRUE, stringsAsFactors = FALSE, sep = ',')
 #       #       #       #       #       #       #       #       #       #       #       #       #       #       #       #       
-, header = TRUE, stringsAsFactors = TRUE, sep = ',')
+
+## COMPLETE THE ACRIVITY LOOKUP TABLE
 index_df <- data.frame(school_num = factor(1:10))
-physical_activity_info <- cbind(index_df, physical_activity_info)
+physical_activity_info_df <- cbind(index_df, physical_activity_info_df)
 ## TOTAL AGGREGATED CLASS+RECESS TIME
-physical_activity_info <- physical_activity_info |> within({
+physical_activity_info_df <- physical_activity_info_df |> within({
 	aaf_t_sum_total <- aaf_t_pe_class + aaf_t_recess
 	aaf_ratio_s_pop <- aaf_s_size / aaf_population_size
 	aaf_indica_rec_t_s_p <- aaf_ratio_s_pop * aaf_t_recess
 	aaf_indica_sum_t_s_p <- aaf_ratio_s_pop * aaf_t_sum_total})
-tail(physical_activity_info)
-lookup_table_info_col <- physical_activity_info[['school_num']]
+
+## MATCH COLEGIO COLUMN IN SCHOO_NUM COLUMN
+lookup_table_info_col <- physical_activity_info_df[['school_num']]
 findee_col <- o433_df[['Colegio']]
 matched_id_col <- match(findee_col, lookup_table_info_col)
-physical_activity_info[matched_id_col, ] |> tail(33)
-oactivity_df <- physical_activity_info[matched_id_col, ]
-oactivity_df <- cbind(ofactored_df, oactivity_df)
 
+## JOINT TO MAKE FINAL ACTIVITY DATASET
+oactivity_df <- physical_activity_info_df[matched_id_col, ]
+oactivity_df <- cbind(ofactored_df, oactivity_df)
 oactivity_df <- oactivity_df[!is.na(oactivity_df[['aaf_indica_sum_t_s_p']]), ]
 
 ## EXTRAC ANTIVITY NAMES
@@ -92,16 +85,14 @@ nm <-names(oactivity_df)
 varnames_activity <- '^aaf_' |> grep(nm, value = TRUE)
 
 ## ACTIVITY VARIABLE REGRESSION ANALYUSES
-res_activity <- regression_significant_main(oactivity_df, joint_nums, varnames_activity, significance_threshold = 0.05, r_min_threshold = 0.04, make_graphics = TRUE, opacity = 0.5, save_graph_to = 'o433activiy_corr.pdf', scatter_cats = FALSE)
-
+res_activity <- regression_significant_main(oactivity_df, joint_nums, varnames_activity, significance_threshold = 0.05, r_min_threshold = 0.05, make_graphics = TRUE, opacity = 0.5, save_graph_to = 'o433activiy_corr.pdf', scatter_cats = FALSE)
 
 ## force activity variables into factors
 oactivity_factored_df <- oactivity_df
 lapply(varnames_activity, \(each_gv) oactivity_factored_df[[each_gv]] <<- as.factor(oactivity_df[[each_gv]]))
 ## ACTIVITY SAME ANALYSIS AS ABOVE BUT THE ACTIVITIES ARE TAKEN AS CATEFORIES FOR  DIFFERENCE ANALYSES. THERER WE 22 SIGNIFICANTS.
-res_activity <- regression_significant_main(oactivity_factored_df, joint_nums, varnames_activity, significance_threshold = 0.01, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.5, save_graph_to = 'o433activiy_diff.pdf', scatter_cats = FALSE)
+res_activity <- regression_significant_main(oactivity_factored_df, joint_nums, varnames_activity, significance_threshold = 0.001, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.5, save_graph_to = 'o433activiy_diff.pdf', scatter_cats = FALSE)
 
- 
 # variables de
 # ambiente para actividad fisica
 # aaf_
@@ -126,3 +117,19 @@ res_activity <- regression_significant_main(oactivity_factored_df, joint_nums, v
 # aaf_indica_rec_t_s_p
 # ## ADDITION OF CLASS TIME PLUS THE RECESS S/P INDICATOR
 # aaf_indica_sum_t_s_p
+
+
+#######################################################################################
+######################################################################################
+## INVESTIGATE WHICH VARIABLE IS WHICH
+######################################################################################
+## TABLE FOR LOOJING GRADE  IN MEXICAN SCHOOLS
+o433_df |> subset(Nacionalidad == 2, select = c('Grado_Escolar', 'Colegio')) |> table()
+## TABLE FOR PIDAHI SECONDARY RATIO
+o433_df |> subset(Nacionalidad == 2 & Colegio == 9, select = c('Grado_Escolar')) |> table()
+## TABLE Ciudad_residencia guadalajara
+## NOTE 8 IS SECONDARY GUADALAJARA
+o433_df |> subset(Ciudad_Residencia == 6 & Nacionalidad == 2, select = c('Grado_Escolar', 'Sexo.', 'Colegio')) |> table()
+#################################################
+## COUNTS OF SCHOOL OBSERVATIONS IN CONTRU 2 (MEXICO)
+o433_df |> subset(Nacionalidad == 2, select = c('Colegio')) |> table()
