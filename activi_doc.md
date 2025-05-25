@@ -1,20 +1,21 @@
 # VARIABLES DE AMBIENTE PARA ACTIVIDAD FISICA
-El sufijo aaf_ en todas las variabe indica Ambiente (para) Actividad Fisica.
+El sufijo aaf_ en todas las variabes abrevia:
+Ambiente (para) Actividad Fisica.
 
 1. aaf_
 
-## OBSERVED VARIABLES
+### OBSERVED VARIABLES
 | Nombre d Variable | Definicion | Valores |
-| ----------------- | -----------| ------- |
-| aaf_t_pe_class| t Tiempo en clase de educacion fisica          | Minutos por semana |
+| ----------------- | ---------- | ------- |
+| aaf_t_pe_class| t Tiempo en clase de ed. fisica	| Minutos por semana |
 | aaf_t_recess	| t Tiempo de recreo                    | Minutos por semana |
-| aaf_population_size | Tamannho de la poblacion total de la escuela | 1 - 4 = chica, mediana, grande, muy_gr |
-| aaf_s_size	| s Tamannho d Espacio para actividad fisica         | 0 - 4 = no_hay, chico, mediano, grande, muy_gr|
+| aaf_population_size | Poblacion total de la escuela	| 1 - 4 = chica, mediana, grande, muy_gr |
+| aaf_s_size	| s Tamannho d Espacio para actividad	| 0 - 4 = no_hay, chico, mediano, grande, muy_gr|
 | aaf_s_avail	| s Espacio esta disponible o no        | 0, 1 |
 | aaf_s_used	| s Espacio se usa o no                 | 0, 1 |
 | aaf_s_shape	| s Forma del espacio                   | rectang, triang, irregular, other |
 
-## COMPUTED VARIABLES
+### COMPUTED VARIABLES
 | Computed Variable | Definition | Formula |
 | ----------------- | -----------| ------- |
 | aaf_t_sum_total | total aggregated class+recess time  | t_sum = t_class + t_recess    |
