@@ -10,9 +10,9 @@ Previous analyses showed that enviromental variables, such as school, have signi
 
 For this reason:
 
-1. we explore the effect of the enviroment variables that promote physiscal activity in schools on IQ and Perf variables.
-1. Variables related to how the evironment of schools devoted to physical activity were collected.
-1. They are named and defined in the following section.
+- we explore the effect of the enviroment variables that promote physiscal activity in schools on IQ and Perf variables.
+- Variables related to how the evironment of schools devoted to physical activity were collected.
+- They are named and defined in the following section.
 
 
 # DOCUMENTATION
@@ -151,7 +151,7 @@ The followind is the list.
 - The strongest association (r>4) was found between IQ and physical activity aggregated time.
 - Of particular interest:
 
-1. Association between POO and aggregated time was found.
+- Association between POO and aggregated time was found.
 
 ```{r include = TRUE}
 ## ACTIVITY VARIABLE REGRESSION ANALYUSES
@@ -169,9 +169,9 @@ lapply(varnames_activity, \(each_gv) oactivity_factored_df[[each_gv]] <<- as.fac
 ### DIFFERENCES BETWEEN GROUPS ANALYSES.
 By using the physical activity as groupping variables:
 
-1. 39 significant differences were found.
-1. Most of them of little interest.
-1. However, the associtiaion between IQ and PSP reported above was replicated.
+- 39 significant differences were found.
+- Most of them of little interest.
+- However, the associtiaion between IQ and PSP reported above was replicated.
 
 ```{r include = TRUE}
 ## ACTIVITY SAME ANALYSIS AS ABOVE BUT THE ACTIVITIES ARE TAKEN AS CATEFORIES FOR  DIFFERENCE ANALYSES. THERER WE 22 SIGNIFICANTS.
