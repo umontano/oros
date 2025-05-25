@@ -154,8 +154,8 @@ The followind is the list.
 - Association between POO and aggregated time was found.
 
 ```{r include = TRUE}
-## ACTIVITY VARIABLE REGRESSION ANALYUSES
-res_activity_corr <- regression_significant_main(oactivity_df, joint_nums, varnames_activity, significance_threshold = 0.05, r_min_threshold = 0.05, make_graphics = TRUE, opacity = 0.5, save_graph_to = 'o433activiy_corr.pdf', scatter_cats = FALSE)
+## ACTIVITY REGRESSION ANALYSES
+res_activity_corr <- regression_significant_main(oactivity_df, joint_nums, varnames_activity, significance_threshold = 0.05, r_min_threshold = 0.05, make_graphics = TRUE, opacity = 0.9, save_graph_to = 'o433activiy_corr.pdf', scatter_cats = FALSE)
 
 ## SHOW THE CORRELATIONS GRID
 res_activity_corr[['grid']]
@@ -175,7 +175,7 @@ By using the physical activity as groupping variables:
 
 ```{r include = TRUE}
 ## ACTIVITY SAME ANALYSIS AS ABOVE BUT THE ACTIVITIES ARE TAKEN AS CATEFORIES FOR  DIFFERENCE ANALYSES. THERER WE 22 SIGNIFICANTS.
-res_activity_diff <- regression_significant_main(oactivity_factored_df, joint_nums, varnames_activity, significance_threshold = 0.041, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.6, save_graph_to = 'o433activiy_diff.pdf', scatter_cats = FALSE)
+res_activity_diff <- regression_significant_main(oactivity_factored_df, joint_nums, varnames_activity, significance_threshold = 0.041, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.7, save_graph_to = 'o433activiy_diff.pdf', scatter_cats = FALSE)
 
 ## SHOW THE GRID
 res_activity_diff[['grid']]
