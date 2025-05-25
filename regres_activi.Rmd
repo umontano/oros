@@ -46,8 +46,8 @@ El sufijo aaf_ en todas las variabe indica Ambiente (para) Actividad Fisica.
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
 		      #results = "hide", 
-		      fig.height = 8,
-		      fig.width = 8,
+		      fig.height = 8.5,
+		      fig.width = 8.5,
 			message = FALSE)
 
 ## LOAD REGRESSION_PLOT FUNCTIONS FOR NESTE MAPPED LA ANALYSES AND GRAPHICING
@@ -150,8 +150,7 @@ Six significan associations were found.
 The followind is the list.
 - The strongest association (r>4) was found between IQ and physical activity aggregated time.
 - Of particular interest:
-
-- Association between POO and aggregated time was found.
+- Association between Oros's PSP social dimension and aggregated time was found.
 
 ```{r include = TRUE}
 ## ACTIVITY REGRESSION ANALYSES
@@ -170,8 +169,8 @@ lapply(varnames_activity, \(each_gv) oactivity_factored_df[[each_gv]] <<- as.fac
 By using the physical activity as groupping variables:
 
 - 39 significant differences were found.
-- Most of them of little interest.
-- However, the associtiaion between IQ and PSP reported above was replicated.
+- Most of them with small effects.
+- However, the associtiaion between IQ and Oros's  PSP social dimension was replicated.
 
 ```{r include = TRUE}
 ## ACTIVITY SAME ANALYSIS AS ABOVE BUT THE ACTIVITIES ARE TAKEN AS CATEFORIES FOR  DIFFERENCE ANALYSES. THERER WE 22 SIGNIFICANTS.
@@ -181,15 +180,15 @@ res_activity_diff <- regression_significant_main(oactivity_factored_df, joint_nu
 res_activity_diff[['grid']]
 ```
 
-## VARIABLE OF INTERES, PSP, GRAPHICS IN DETAIL.
+## VARIABLE OF INTERES, OROS'S PSP SOCIAL DIMENSION, GRAPHICS IN DETAIL.
 
-### PSP TIME ASSOCIATION.
+### PSP-TIME ASSOCIATION.
 ```{r include = TRUE, fig.width = 6.5, fig.height = 6.5}
 ## SHOW THE PSP CORRELATION GRAPH
 res_activity_corr[['plots']][['PSP_Total_~_aaf_t_sum_total']]
 ```
 
-### PSP TIME DIFFERENCES.
+### DIFFERENCES IN PSP SOCIAL DIMENSION.
 ```{r include = TRUE, fig.width = 6.5, fig.height = 6.5}
 ## SHOW THE PSP CORRELATION GRAPH
 res_activity_diff[['plots']][['PSP_Total_~_aaf_t_sum_total']]
