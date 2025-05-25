@@ -1,0 +1,204 @@
+---
+title: "PHYSICAL ACTIVITY ENVIRONMENT AND PERFEC/TENACI"
+author: "Ma. Fer. Serrano"
+date: "Today's Date"
+output: pdf_document
+---
+
+# DOCUMENTATION
+
+## VARIABLES DE AMBIENTE PARA ACTIVIDAD FISICA
+El sufijo aaf_ en todas las variabe indica Ambiente (para) Actividad Fisica.
+
+- aaf_
+
+### OBSERVED VARIABLES
+| Nombre d Variable | Definicion | Valores |
+| ----------------- | -----------| ------- |
+| aaf_t_pe_class| t Tiempo en clase de educacion fisica          | Minutos por semana |
+| aaf_t_recess	| t Tiempo de recreo                    | Minutos por semana |
+| aaf_population_size | Tamannho de la poblacion total de la escuela | 1 - 4 = chica, mediana, grande, muy_gr |
+| aaf_s_size	| s Tamannho d Espacio para actividad fisica         | 0 - 4 = no_hay, chico, mediano, grande, muy_gr|
+| aaf_s_avail	| s Espacio esta disponible o no        | 0, 1 |
+| aaf_s_used	| s Espacio se usa o no                 | 0, 1 |
+| aaf_s_shape	| s Forma del espacio                   | rectang, triang, irregular, other |
+
+### COMPUTED VARIABLES
+| Computed Variable | Definition | Formula |
+| ----------------- | -----------| ------- |
+| aaf_t_sum_total | total aggregated class+recess time  | t_sum = t_class + t_recess    |
+| aaf_ratio_s_pop | space-size population-size ratio    | ratio_sp = s_size / pop_size     |
+| aaf_indica_rec_t_s_p | time_space/population Indicator: Product of recess-time times the space/population ratio   | indica_tsp = t_recesss * ratio_sp          |
+| aaf_indica_sum_t_s_p | total time_space/population Indicator: Product of aggregated time (class+recess) times the space/population ratio   | indica_sum_tsp = t_sum * ratio_sp  |
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+		      #results = "hide", 
+		      fig.height = 8,
+		      fig.width = 8,
+			message = FALSE)
+
+## LOAD REGRESSION_PLOT FUNCTIONS FOR NESTE MAPPED LA ANALYSES AND GRAPHICING
+if(!exists('regression_significant_main')) source('https://raw.githubusercontent.com/umontano/regression/refs/heads/main/sig_graph.R')
+## LOAD CSV DATABASE
+if(!exists('o433_df')) o433_df <- read.csv('https://raw.githubusercontent.com/umontano/oros/refs/heads/main/o433.csv')
+physical_activity_info_df <- read.csv('https://github.com/umontano/oros/raw/main/activi.csv', header = TRUE, stringsAsFactors = FALSE, sep = ',')
+
+## INSTALL LIBRARIES IF NOT INSTALLED, AND LOAD THEM
+packages <- c(
+'ggplot2',
+'gridExtra',
+'ggthemes',
+'tidytext',
+'dplyr',
+'tibble',
+'ggbeeswarm'
+)
+lapply(packages, \(x) if (!require(x, character.only = TRUE)) { install.packages(x)
+	library(x, character.only = TRUE) }) |> invisible()
+
+## COMPUTE REMAINING (THE NON-GROUPPING) NAMES VECTORS
+nm <- names(o433_df)
+varnames_groupping <- grep('Edad|Grado|Sexo|Col|locatio|Nacional', nm, value = TRUE)
+varnames_num_no_age_no_grade_predictors <- '^[^C].*otal|Grit|erfe' |> grep(nm, value = TRUE)
+## THIS NAMES SET INCORPORATES AGE AND SCHOOL-GRADE
+varnames_num_predictors <- 'Edad|Grado|^[^C].*otal|Grit|erfe' |> grep(nm, value = TRUE)
+vn_pred_no_orostotal <- 'CI_|PE_|^[^Pt].*otal|Grit|erfe' |> grep(nm, value = TRUE)
+varnames_iq <- grep('CI', nm, value = TRUE)
+varnames_iqgroups <- c('iq_g_128', 'iq_g_115', 'iq_g_median')
+varnames_oros_items <- grep('^P\\w+\\d+$', nm, value = TRUE, perl = TRUE)
+joint_nums <- c(varnames_iq, varnames_num_no_age_no_grade_predictors)
+joint_cats <- c(varnames_groupping, varnames_iqgroups)
+
+## MAKE THE GROUPPING VARIABLES FACTOR
+ofactored_df <- o433_df['Codigo|X|Promedio' |> grep(names(o433_df), value=T) |> base::setdiff(names(o433_df), y=_)]
+lapply(joint_cats, \(each_gv) ofactored_df[[each_gv]] <<- as.factor(o433_df[[each_gv]])) |> invisible()
+
+
+#######################################################################################
+######################################################################################
+## PIDAHI PARAMETERS
+pidahi_secondary_percentage <- 0.90
+pidahi_pe_workshop_percentage <- 0.30
+pidahi_t_pe_class_sum_total <- 100*pidahi_secondary_percentage + 120*(1-pidahi_secondary_percentage) + 90*pidahi_pe_workshop_percentage
+
+#       #       #       #       #       #       #       #       #       #       #       #       #       #       #       #       
+## LOAD ACTIVITY LOOKUP TABLE INFORMATION
+#physical_activity_info_df <- read.csv(text =
+dommycsvtext <- "
+school_name, aaf_t_pe_class, aaf_t_recess, aaf_population_size, aaf_s_size
+bicentenario,
+esperanza,
+coltec,
+andes,
+chia,
+villavicencio,
+secaugusto,	100,		200,		2,		4
+secguadala,	100,		150,		2,		3
+pidahi,		129,		150,		1,		1
+primcongreso,	120,		150,		3,		2
+"
+#, header = TRUE, stringsAsFactors = FALSE, sep = ',')
+#       #       #       #       #       #       #       #       #       #       #       #       #       #       #       #       
+
+## COMPLETE THE ACRIVITY LOOKUP TABLE
+index_df <- data.frame(school_num = factor(1:10))
+physical_activity_info_df <- cbind(index_df, physical_activity_info_df)
+## TOTAL AGGREGATED CLASS+RECESS TIME
+physical_activity_info_df <-
+	physical_activity_info_df |>
+	within({
+	aaf_t_sum_total <- aaf_t_pe_class + aaf_t_recess
+	aaf_ratio_s_pop <- aaf_s_size / aaf_population_size
+	aaf_indica_rec_t_s_p <- aaf_ratio_s_pop * aaf_t_recess
+	aaf_indica_sum_t_s_p <- aaf_ratio_s_pop * aaf_t_sum_total})
+
+## MATCH COLEGIO COLUMN IN SCHOO_NUM COLUMN
+lookup_table_info_col <- physical_activity_info_df[['school_num']]
+findee_col <- o433_df[['Colegio']]
+matched_id_col <- match(findee_col, lookup_table_info_col)
+
+## JOINT TO MAKE FINAL ACTIVITY DATASET
+oactivity_df <- physical_activity_info_df[matched_id_col, ]
+oactivity_df <- cbind(ofactored_df, oactivity_df)
+oactivity_df <- oactivity_df[!is.na(oactivity_df[['aaf_indica_sum_t_s_p']]), ]
+
+## EXTRAC ANTIVITY NAMES
+nm <-names(oactivity_df)
+varnames_activity <- '^aaf_' |> grep(nm, value = TRUE)
+
+```
+
+# ANALYSES.
+
+## LINEAR REGRESSSION ASSOCIATION ANALYSES.
+
+### PHYSICAL ACTIVITY ENVIROMENT VS IQ/FROST/OROS VARIABLES.
+Six significan associations were found.
+The followind is the list.
+- The strongest association (r>4) was found between iq and physical actriviti aggregated time.
+- Of particular interest:
+1. Association between POO and aggregated time was found.
+
+```{r include = TRUE}
+## ACTIVITY VARIABLE REGRESSION ANALYUSES
+res_activity_corr <- regression_significant_main(oactivity_df, joint_nums, varnames_activity, significance_threshold = 0.05, r_min_threshold = 0.05, make_graphics = TRUE, opacity = 0.5, save_graph_to = 'o433activiy_corr.pdf', scatter_cats = FALSE)
+
+## SHOW THE CORRELATIONS GRID
+res_activity_corr[['grid']]
+```
+```{r include=FALSE}
+## FORCE ACTIVITY VARIABLES INTO FACTORS
+oactivity_factored_df <- oactivity_df
+lapply(varnames_activity, \(each_gv) oactivity_factored_df[[each_gv]] <<- as.factor(oactivity_df[[each_gv]])) |> invisible()
+```
+
+### DIFFERENCES BETWEEN GROUPS ANALYSES.
+By using the physical activity as groupping variables:
+
+1. 39 significant differences were found.
+1. Most of them of little interest.
+1. However, the associtiaion between iq and PSP reported above was replicated.
+
+```{r include = TRUE}
+## ACTIVITY SAME ANALYSIS AS ABOVE BUT THE ACTIVITIES ARE TAKEN AS CATEFORIES FOR  DIFFERENCE ANALYSES. THERER WE 22 SIGNIFICANTS.
+res_activity_diff <- regression_significant_main(oactivity_factored_df, joint_nums, varnames_activity, significance_threshold = 0.041, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.6, save_graph_to = 'o433activiy_diff.pdf', scatter_cats = FALSE)
+
+## SHOW THE GRID
+res_activity_diff[['grid']]
+```
+
+## VARIABLE OF INTERES, PSP, GRAPHICS IN DETAIL.
+
+### PSP TIME ASSOCIATION.
+```{r include = TRUE}
+## SHOW THE PSP CORRELATION GRAPH
+res_activity_corr[['plots']][['PSP_Total_~_aaf_t_sum_total']]
+```
+
+### PSP TIME DIFFERENCES.
+```{r include = TRUE}
+## SHOW THE PSP CORRELATION GRAPH
+res_activity_diff[['plots']][['PSP_Total_~_aaf_t_sum_total']]
+```
+
+```{r include = FALSE}
+
+#######################################################################################
+######################################################################################
+## INVESTIGATE WHICH VARIABLE IS WHICH
+######################################################################################
+## TABLE FOR LOOJING GRADE  IN MEXICAN SCHOOLS
+o433_df |> subset(Nacionalidad == 2, select = c('Grado_Escolar', 'Colegio')) |> table()
+## TABLE FOR PIDAHI SECONDARY RATIO
+o433_df |> subset(Nacionalidad == 2 & Colegio == 9, select = c('Grado_Escolar')) |> table()
+## TABLE Ciudad_residencia guadalajara
+## NOTE 8 IS SECONDARY GUADALAJARA
+o433_df |> subset(Ciudad_Residencia == 6 & Nacionalidad == 2, select = c('Grado_Escolar', 'Sexo.', 'Colegio')) |> table()
+#################################################
+## COUNTS OF SCHOOL OBSERVATIONS IN CONTRU 2 (MEXICO)
+o433_df |> subset(Nacionalidad == 2, select = c('Colegio')) |> table()
+
+```
