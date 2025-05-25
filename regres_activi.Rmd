@@ -5,6 +5,15 @@ date: "Today's Date"
 output: pdf_document
 ---
 
+# INTRODUCTION.
+Previous analyses showed that enviromental variables such as the School have significant effects on IQ and Perf. variables.
+
+For this reason:
+1. we explore the effect of the enviroment variables that promote physiscal activity in schools on IQ and Perf variables.
+1. Variables related to how the evironment of schools devoted to physical activity were collected.
+1. They are named and defined in the following section.
+
+
 # DOCUMENTATION
 
 ## VARIABLES DE AMBIENTE PARA ACTIVIDAD FISICA
