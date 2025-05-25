@@ -184,13 +184,13 @@ res_activity_diff[['grid']]
 ## VARIABLE OF INTERES, PSP, GRAPHICS IN DETAIL.
 
 ### PSP TIME ASSOCIATION.
-```{r include = TRUE}
+```{r include = TRUE, fig.width = 6.5, fig.height = 6.5}
 ## SHOW THE PSP CORRELATION GRAPH
 res_activity_corr[['plots']][['PSP_Total_~_aaf_t_sum_total']]
 ```
 
 ### PSP TIME DIFFERENCES.
-```{r include = TRUE}
+```{r include = TRUE, fig.width = 6.5, fig.height = 6.5}
 ## SHOW THE PSP CORRELATION GRAPH
 res_activity_diff[['plots']][['PSP_Total_~_aaf_t_sum_total']]
 ```
