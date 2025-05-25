@@ -171,7 +171,7 @@ By using the physical activity as groupping variables:
 
 1. 39 significant differences were found.
 1. Most of them of little interest.
-1. However, the associtiaion between iq and PSP reported above was replicated.
+1. However, the associtiaion between IQ and PSP reported above was replicated.
 
 ```{r include = TRUE}
 ## ACTIVITY SAME ANALYSIS AS ABOVE BUT THE ACTIVITIES ARE TAKEN AS CATEFORIES FOR  DIFFERENCE ANALYSES. THERER WE 22 SIGNIFICANTS.
