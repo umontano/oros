@@ -146,12 +146,13 @@ varnames_activity <- '^aaf_' |> grep(nm, value = TRUE)
 ## LINEAR REGRESSSION ASSOCIATION ANALYSES.
 
 ### PHYSICAL ACTIVITY ENVIROMENT VS IQ/FROST/OROS VARIABLES.
-Six significan associations were found.
-The followind is the list.
-- The strongest association (r>4) was found between IQ and physical activity aggregated time.
+Six significant associations were found.
+
+- The strongest association (r>0.6) was found between IQ and physical activity aggregated time.
 - Of particular interest:
 - Association between Oros's PSP social dimension and aggregated time was found.
 
+The following is the list of significant results, listing the name of variabes, pvalue and Rsquared.
 ```{r include = TRUE}
 ## ACTIVITY REGRESSION ANALYSES
 res_activity_corr <- regression_significant_main(oactivity_df, joint_nums, varnames_activity, significance_threshold = 0.05, r_min_threshold = 0.05, make_graphics = TRUE, opacity = 0.9, save_graph_to = 'o433activiy_corr.pdf', scatter_cats = FALSE)
@@ -172,6 +173,7 @@ By using the physical activity as groupping variables:
 - Most of them with small effects.
 - However, the associtiaion between IQ and Oros's  PSP social dimension was replicated.
 
+The following is the list of significant results, listing the name of variabes, pvalue and Rsquared.
 ```{r include = TRUE}
 ## ACTIVITY SAME ANALYSIS AS ABOVE BUT THE ACTIVITIES ARE TAKEN AS CATEFORIES FOR  DIFFERENCE ANALYSES. THERER WE 22 SIGNIFICANTS.
 res_activity_diff <- regression_significant_main(oactivity_factored_df, joint_nums, varnames_activity, significance_threshold = 0.041, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.7, save_graph_to = 'o433activiy_diff.pdf', scatter_cats = FALSE)
