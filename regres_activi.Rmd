@@ -16,7 +16,7 @@ For this reason:
 # DOCUMENTATION
 
 ## VARIABLES DE AMBIENTE PARA ACTIVIDAD FISICA
-El sufijo aaf_ en todas las variabes abrevia:
+El sufijo aaf_ en todas las variables abrevia:
 Ambiente (para) Actividad Fisica.
 
 - aaf_
@@ -150,7 +150,7 @@ Six significant associations were found.
 - Of particular interest:
 - Association between Oros's PSP social dimension and aggregated time was found.
 
-The following is the list of significant results, listing the name of variabes, pvalue and Rsquared.
+The following is the list of significant results, listing the name of variables, pvalue and Rsquared.
 ```{r show_corrs_grid, include = TRUE}
 ## ACTIVITY REGRESSION ANALYSES
 res_activity_corr <- regression_significant_main(oactivity_df, joint_nums, varnames_activity, significance_threshold = 0.05, r_min_threshold = 0.05, make_graphics = TRUE, opacity = 0.9, save_graph_to = 'o433activiy_corr.pdf', scatter_cats = FALSE)
@@ -162,22 +162,31 @@ res_activity_corr[['grid']]
 ## FORCE ACTIVITY VARIABLES INTO FACTORS
 oactivity_factored_df <- oactivity_df
 lapply(varnames_activity, \(each_gv) oactivity_factored_df[[each_gv]] <<- as.factor(oactivity_df[[each_gv]])) |> invisible()
+
 ```
 
 ### DIFFERENCES BETWEEN GROUPS ANALYSES.
+
+The following is the list of significant results, listing the name of variables, pvalue and Rsquared.
+```{r show_cats_diffs, include = TRUE}
+## ACTIVITY SAME ANALYSIS AS ABOVE BUT THE ACTIVITIES ARE TAKEN AS CATEFORIES FOR  DIFFERENCE ANALYSES
+res_activity_diff <- regression_significant_main(oactivity_factored_df, joint_nums, varnames_activity, significance_threshold = 0.041, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.7, save_graph_to = 'o433activiy_diff.pdf', scatter_cats = FALSE)
+
+## RENAME THE CATEGORICAL ACTIVITY GRID OF PLOT FOR EASY REFERENCE LATER
+actdiffgrid <- res_activity_diff[['grid']]
+actdiffsiglength <- length(res_activity_diff[['plots']])
+```
+
+#### RESULTS FROM DIFFERENCE ANALYSES.
 By using the physical activity as groupping variables:
 
-- 39 significant differences were found.
+- `r actdiffsiglength` significant differences were found.
 - Most of them with small effects.
 - However, the associtiaion between IQ and Oros's  PSP social dimension was replicated.
 
-The following is the list of significant results, listing the name of variabes, pvalue and Rsquared.
-```{r show_cats_diffs, include = TRUE}
-## ACTIVITY SAME ANALYSIS AS ABOVE BUT THE ACTIVITIES ARE TAKEN AS CATEFORIES FOR  DIFFERENCE ANALYSES. THERER WE 22 SIGNIFICANTS.
-res_activity_diff <- regression_significant_main(oactivity_factored_df, joint_nums, varnames_activity, significance_threshold = 0.041, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.7, save_graph_to = 'o433activiy_diff.pdf', scatter_cats = FALSE)
-
+```{r only_show_cat_diffs, include = TRUE}
 ## SHOW THE GRID
-res_activity_diff[['grid']]
+actdiffgrid
 ```
 
 ## VARIABLE OF INTERES, OROS'S PSP SOCIAL DIMENSION, GRAPHICS IN DETAIL.
