@@ -119,9 +119,9 @@ physical_activity_info_df <-
 	physical_activity_info_df |>
 	within({
 	aaf_t_sum_total <- aaf_t_pe_class + aaf_t_recess
-	aaf_ratio_s_pop <- aaf_s_size / aaf_population_size
-	aaf_indica_rec_t_s_p <- aaf_ratio_s_pop * aaf_t_recess
-	aaf_indica_sum_t_s_p <- aaf_ratio_s_pop * aaf_t_sum_total})
+	aaf_ratio_s_pop <- signif(aaf_s_size / aaf_population_size, digits = 1)
+	aaf_indica_rec_t_s_p <- floor(aaf_ratio_s_pop * aaf_t_recess)
+	aaf_indica_sum_t_s_p <- floor(aaf_ratio_s_pop * aaf_t_sum_total) })
 
 ## MATCH COLEGIO COLUMN IN SCHOO_NUM COLUMN
 lookup_table_info_col <- physical_activity_info_df[['school_num']]
@@ -151,14 +151,14 @@ Six significant associations were found.
 - Association between Oros's PSP social dimension and aggregated time was found.
 
 The following is the list of significant results, listing the name of variabes, pvalue and Rsquared.
-```{r include = TRUE}
+```{r show_corrs_grid, include = TRUE}
 ## ACTIVITY REGRESSION ANALYSES
 res_activity_corr <- regression_significant_main(oactivity_df, joint_nums, varnames_activity, significance_threshold = 0.05, r_min_threshold = 0.05, make_graphics = TRUE, opacity = 0.9, save_graph_to = 'o433activiy_corr.pdf', scatter_cats = FALSE)
 
 ## SHOW THE CORRELATIONS GRID
 res_activity_corr[['grid']]
 ```
-```{r include=FALSE}
+```{r factor_activity_vars, include=FALSE}
 ## FORCE ACTIVITY VARIABLES INTO FACTORS
 oactivity_factored_df <- oactivity_df
 lapply(varnames_activity, \(each_gv) oactivity_factored_df[[each_gv]] <<- as.factor(oactivity_df[[each_gv]])) |> invisible()
@@ -172,7 +172,7 @@ By using the physical activity as groupping variables:
 - However, the associtiaion between IQ and Oros's  PSP social dimension was replicated.
 
 The following is the list of significant results, listing the name of variabes, pvalue and Rsquared.
-```{r include = TRUE}
+```{r show_cats_diffs, include = TRUE}
 ## ACTIVITY SAME ANALYSIS AS ABOVE BUT THE ACTIVITIES ARE TAKEN AS CATEFORIES FOR  DIFFERENCE ANALYSES. THERER WE 22 SIGNIFICANTS.
 res_activity_diff <- regression_significant_main(oactivity_factored_df, joint_nums, varnames_activity, significance_threshold = 0.041, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.7, save_graph_to = 'o433activiy_diff.pdf', scatter_cats = FALSE)
 
@@ -183,18 +183,18 @@ res_activity_diff[['grid']]
 ## VARIABLE OF INTERES, OROS'S PSP SOCIAL DIMENSION, GRAPHICS IN DETAIL.
 
 ### PSP-TIME ASSOCIATION.
-```{r include = TRUE, fig.width = 6.5, fig.height = 6.5}
+```{r corr_sumt_psp, include = TRUE, fig.width = 6.5, fig.height = 6.5}
 ## SHOW THE PSP CORRELATION GRAPH
 res_activity_corr[['plots']][['PSP_Total_~_aaf_t_sum_total']]
 ```
 
 ### DIFFERENCES IN PSP SOCIAL DIMENSION.
-```{r include = TRUE, fig.width = 6.5, fig.height = 6.5}
+```{r diff_sumt_psp, include = TRUE, fig.width = 6.5, fig.height = 6.5}
 ## SHOW THE PSP CORRELATION GRAPH
 res_activity_diff[['plots']][['PSP_Total_~_aaf_t_sum_total']]
 ```
 
-```{r include = FALSE}
+```{r schools_contingency_tables, include = FALSE}
 
 #######################################################################################
 ######################################################################################
