@@ -168,6 +168,7 @@ lapply(varnames_activity, \(each_gv) oactivity_factored_df[[each_gv]] <<- as.fac
 ### DIFFERENCES BETWEEN GROUPS ANALYSES.
 
 The following is the list of significant results, listing the name of variables, pvalue and Rsquared.
+
 ```{r show_cats_diffs, include = TRUE}
 ## ACTIVITY SAME ANALYSIS AS ABOVE BUT THE ACTIVITIES ARE TAKEN AS CATEFORIES FOR  DIFFERENCE ANALYSES
 res_activity_diff <- regression_significant_main(oactivity_factored_df, joint_nums, varnames_activity, significance_threshold = 0.041, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.7, save_graph_to = 'o433activiy_diff.pdf', scatter_cats = FALSE)
@@ -178,6 +179,7 @@ actdiffsiglength <- length(res_activity_diff[['plots']])
 ```
 
 #### RESULTS FROM DIFFERENCE ANALYSES.
+
 By using the physical activity as groupping variables:
 
 - `r actdiffsiglength` significant differences were found.
@@ -192,12 +194,14 @@ actdiffgrid
 ## VARIABLE OF INTERES, OROS'S PSP SOCIAL DIMENSION, GRAPHICS IN DETAIL.
 
 ### PSP-TIME ASSOCIATION.
+
 ```{r corr_sumt_psp, include = TRUE, fig.width = 6.5, fig.height = 6.5}
 ## SHOW THE PSP CORRELATION GRAPH
 res_activity_corr[['plots']][['PSP_Total_~_aaf_t_sum_total']]
 ```
 
 ### DIFFERENCES IN PSP SOCIAL DIMENSION.
+
 ```{r diff_sumt_psp, include = TRUE, fig.width = 6.5, fig.height = 6.5}
 ## SHOW THE PSP CORRELATION GRAPH
 res_activity_diff[['plots']][['PSP_Total_~_aaf_t_sum_total']]
