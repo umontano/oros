@@ -137,62 +137,59 @@ oactivity_df <- oactivity_df[!is.na(oactivity_df[['aaf_indica_sum_t_s_p']]), ]
 nm <-names(oactivity_df)
 varnames_activity <- '^aaf_' |> grep(nm, value = TRUE)
 
-```
-
-# ANALYSES.
-
-## LINEAR REGRESSSION ASSOCIATION ANALYSES.
-
-### PHYSICAL ACTIVITY ENVIROMENT VS IQ/FROST/OROS VARIABLES.
-Six significant associations were found.
-
-- The strongest association (r>0.6) was found between IQ and physical activity aggregated time.
-- Of particular interest:
-- Association between Oros's PSP social dimension and aggregated time was found.
-
-The following is the list of significant results, listing the name of variables, pvalue and Rsquared.
-```{r show_corrs_grid, include = TRUE}
 ## ACTIVITY REGRESSION ANALYSES
-res_activity_corr <- regression_significant_main(oactivity_df, joint_nums, varnames_activity, significance_threshold = 0.05, r_min_threshold = 0.05, make_graphics = TRUE, opacity = 0.9, save_graph_to = 'o433activiy_corr.pdf', scatter_cats = FALSE)
+#res_activity_corr <- regression_significant_main(oactivity_df, joint_nums, varnames_activity, significance_threshold = 0.05, r_min_threshold = 0.07, make_graphics = TRUE, opacity = 0.9, save_graph_to = 'o433activiy_corr.pdf', scatter_cats = FALSE)
 
-## SHOW THE CORRELATIONS GRID
-res_activity_corr[['grid']]
-```
-```{r factor_activity_vars, include=FALSE}
+## ACTIVITY REGRESSION ANALYSES
+res_activity_corr <- regression_significant_main(oactivity_df, joint_nums, varnames_activity, significance_threshold = 0.05, r_min_threshold = 0.07, make_graphics = TRUE, opacity = 0.9, save_graph_to = 'o433activiy_corr.pdf', scatter_cats = FALSE)
+
 ## FORCE ACTIVITY VARIABLES INTO FACTORS
 oactivity_factored_df <- oactivity_df
 lapply(varnames_activity, \(each_gv) oactivity_factored_df[[each_gv]] <<- as.factor(oactivity_df[[each_gv]])) |> invisible()
 
-```
-
-### DIFFERENCES BETWEEN GROUPS ANALYSES.
-
-The following is the list of significant results, listing the name of variables, pvalue and Rsquared.
-
-```{r show_cats_diffs, include = TRUE}
 ## ACTIVITY SAME ANALYSIS AS ABOVE BUT THE ACTIVITIES ARE TAKEN AS CATEFORIES FOR  DIFFERENCE ANALYSES
 res_activity_diff <- regression_significant_main(oactivity_factored_df, joint_nums, varnames_activity, significance_threshold = 0.041, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.7, save_graph_to = 'o433activiy_diff.pdf', scatter_cats = FALSE)
-
 ## RENAME THE CATEGORICAL ACTIVITY GRID OF PLOT FOR EASY REFERENCE LATER
 actdiffgrid <- res_activity_diff[['grid']]
 actdiffsiglength <- length(res_activity_diff[['plots']])
 ```
 
-#### RESULTS FROM DIFFERENCE ANALYSES.
+# ANALYSES.
+## LINEAR REGRESSSION ASSOCIATION ANALYSES.
+### PHYSICAL ACTIVITY ENVIROMENT VS IQ/FROST/OROS VARIABLES.
+Six significant associations were found.
 
+- `r length(res_activity_corr[['pr2']])` significant differences were found.
+- The strongest association (r>0.7) was found between IQ and physical activity aggregated time.
+- Of particular interest:
+- Association between Oros's PSP social dimension and aggregated time was found.
+
+The following is the list of significant results, listing the name of variables, pvalue and Adjusted Rsquared.
+```{r show_corr_function, include = TRUE}
+show_pars(res_activity_corr)
+```
+```{r grid_corr_function, include = TRUE, fig.width = 6.5, fig.height = 6.5}
+grid.draw(res_activity_corr[['grid']])
+```
+
+### DIFFERENCES BETWEEN GROUPS ANALYSES.
 By using the physical activity as groupping variables:
 
 - `r actdiffsiglength` significant differences were found.
 - Most of them with small effects.
 - However, the associtiaion between IQ and Oros's  PSP social dimension was replicated.
 
-```{r only_show_cat_diffs, include = TRUE}
-## SHOW THE GRID
-actdiffgrid
+The following is the list of significant results, listing the name of variables, pvalue and Adjusted Rsquared.
+```{r show_diff_function, include = TRUE}
+## PRINT THE PARAMETERS WITH THE SHOW_PARS FUNTION
+show_pars(res_activity_diff)
+```
+```{r grid_diff_function, include = TRUE, fig.width = 10.5, fig.height = 10.5}
+## DRAW THE DIFFERENCES BY CATEGORICAL VARIABLES GRID
+grid.draw(res_activity_diff[['grid']])
 ```
 
-## VARIABLE OF INTERES, OROS'S PSP SOCIAL DIMENSION, GRAPHICS IN DETAIL.
-
+## VARIABLE OF INTEREST, OROS'S PSP SOCIAL DIMENSION, GRAPHICS IN DETAIL.
 ### PSP-TIME ASSOCIATION.
 
 ```{r corr_sumt_psp, include = TRUE, fig.width = 6.5, fig.height = 6.5}
