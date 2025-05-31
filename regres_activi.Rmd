@@ -160,7 +160,7 @@ actdiffsiglength <- length(res_activity_diff[['plots']])
 Six significant associations were found.
 
 - `r length(res_activity_corr[['pr2']])` significant differences were found.
-- The strongest association (r>0.7) was found between IQ and physical activity aggregated time.
+- The strongest association (r>0.6) was found between IQ and physical activity aggregated time.
 - Of particular interest:
 - Association between Oros's PSP social dimension and aggregated time was found.
 
