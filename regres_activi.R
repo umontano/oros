@@ -2,7 +2,7 @@
 if(!exists('regression_significant_main')) source('https://raw.githubusercontent.com/umontano/regression/refs/heads/main/sig_graph.R')
 ## LOAD CSV DATABASE
 if(!exists('o433_df')) o433_df <- read.csv('https://raw.githubusercontent.com/umontano/oros/refs/heads/main/o433.csv')
-if(!exists('physical_activity_info_df')) physical_activity_info_df <- read.csv('https://github.com/umontano/oros/raw/main/activi.csv', header = TRUE, stringsAsFactors = FALSE, sep = ',')
+physical_activity_info_df <- read.csv('https://github.com/umontano/oros/raw/main/activi.csv', header = TRUE, stringsAsFactors = FALSE, sep = ',')
 
 ## INSTALL LIBRARIES IF NOT INSTALLED, AND LOAD THEM
 packages <- c(
@@ -11,10 +11,11 @@ packages <- c(
 'ggthemes',
 'tidytext',
 'dplyr',
-'tibble'
+'tibble',
+'ggbeeswarm'
 )
 lapply(packages, \(x) if (!require(x, character.only = TRUE)) { install.packages(x)
-	library(x, character.only = TRUE) })
+	library(x, character.only = TRUE) }) |> invisible()
 
 ## COMPUTE REMAINING (THE NON-GROUPPING) NAMES VECTORS
 nm <- names(o433_df)
@@ -31,7 +32,7 @@ joint_cats <- c(varnames_groupping, varnames_iqgroups)
 
 ## MAKE THE GROUPPING VARIABLES FACTOR
 ofactored_df <- o433_df['Codigo|X|Promedio' |> grep(names(o433_df), value=T) |> base::setdiff(names(o433_df), y=_)]
-lapply(joint_cats, \(each_gv) ofactored_df[[each_gv]] <<- as.factor(o433_df[[each_gv]]))
+lapply(joint_cats, \(each_gv) ofactored_df[[each_gv]] <<- as.factor(o433_df[[each_gv]])) |> invisible()
 
 
 #######################################################################################
@@ -64,11 +65,13 @@ primcongreso,	120,		150,		3,		2
 index_df <- data.frame(school_num = factor(1:10))
 physical_activity_info_df <- cbind(index_df, physical_activity_info_df)
 ## TOTAL AGGREGATED CLASS+RECESS TIME
-physical_activity_info_df <- physical_activity_info_df |> within({
+physical_activity_info_df <-
+	physical_activity_info_df |>
+	within({
 	aaf_t_sum_total <- aaf_t_pe_class + aaf_t_recess
-	aaf_ratio_s_pop <- aaf_s_size / aaf_population_size
-	aaf_indica_rec_t_s_p <- aaf_ratio_s_pop * aaf_t_recess
-	aaf_indica_sum_t_s_p <- aaf_ratio_s_pop * aaf_t_sum_total})
+	aaf_ratio_s_pop <- signif(aaf_s_size / aaf_population_size, digits = 1)
+	aaf_indica_rec_t_s_p <- floor(aaf_ratio_s_pop * aaf_t_recess)
+	aaf_indica_sum_t_s_p <- floor(aaf_ratio_s_pop * aaf_t_sum_total) })
 
 ## MATCH COLEGIO COLUMN IN SCHOO_NUM COLUMN
 lookup_table_info_col <- physical_activity_info_df[['school_num']]
@@ -84,52 +87,16 @@ oactivity_df <- oactivity_df[!is.na(oactivity_df[['aaf_indica_sum_t_s_p']]), ]
 nm <-names(oactivity_df)
 varnames_activity <- '^aaf_' |> grep(nm, value = TRUE)
 
-## ACTIVITY VARIABLE REGRESSION ANALYUSES
-res_activity <- regression_significant_main(oactivity_df, joint_nums, varnames_activity, significance_threshold = 0.05, r_min_threshold = 0.05, make_graphics = TRUE, opacity = 0.5, save_graph_to = 'o433activiy_corr.pdf', scatter_cats = FALSE)
 
-## force activity variables into factors
+## ACTIVITY REGRESSION ANALYSES
+res_activity_corr <- regression_significant_main(oactivity_df, joint_nums, varnames_activity, significance_threshold = 0.05, r_min_threshold = 0.07, make_graphics = TRUE, opacity = 0.9, save_graph_to = 'o433activiy_corr.pdf', scatter_cats = FALSE)
+
+## FORCE ACTIVITY VARIABLES INTO FACTORS
 oactivity_factored_df <- oactivity_df
-lapply(varnames_activity, \(each_gv) oactivity_factored_df[[each_gv]] <<- as.factor(oactivity_df[[each_gv]]))
-## ACTIVITY SAME ANALYSIS AS ABOVE BUT THE ACTIVITIES ARE TAKEN AS CATEFORIES FOR  DIFFERENCE ANALYSES. THERER WE 22 SIGNIFICANTS.
-res_activity <- regression_significant_main(oactivity_factored_df, joint_nums, varnames_activity, significance_threshold = 0.001, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.5, save_graph_to = 'o433activiy_diff.pdf', scatter_cats = FALSE)
+lapply(varnames_activity, \(each_gv) oactivity_factored_df[[each_gv]] <<- as.factor(oactivity_df[[each_gv]])) |> invisible()
 
-# variables de
-# ambiente para actividad fisica
-# aaf_
-
-# ## OBSERVED VARIABLES
-# aaf_t_pe_class| t tiempo educacion fisica en minutos por semana
-# aaf_t_recess	| t tiempo de recreo en minutos por semana
-# aaf_population_size | tamannho de la poblacion total de la escuela en 1 a 4 chicam median grande muy granade
-# aaf_s_size	| s espacio para actividades fisicas, en 0 a 4, no hay chico mediano grande muy grande
-# aaf_s_avail	| s espacio esta o no disponibel
-# aaf_s_used	| s espacio es usado o no
-# aaf_s_shape	| s forma del espacio
-# 
-# ## COMPUTED VARIABLES
-# ## TOTAL AGGREGATED CLASS+RECESS TIME
-# aaf_t_sum_total
-#
-# ## SPACE SIZE POPULATION SIZE RATIO
-# aaf_ratio_s_pop
-# 
-# ## PRODUCT OF RECESS-TIME TIMES THE SPACE/POPULATIOIN RATIO
-# aaf_indica_rec_t_s_p
-# ## ADDITION OF CLASS TIME PLUS THE RECESS S/P INDICATOR
-# aaf_indica_sum_t_s_p
-
-
-#######################################################################################
-######################################################################################
-## INVESTIGATE WHICH VARIABLE IS WHICH
-######################################################################################
-## TABLE FOR LOOJING GRADE  IN MEXICAN SCHOOLS
-o433_df |> subset(Nacionalidad == 2, select = c('Grado_Escolar', 'Colegio')) |> table()
-## TABLE FOR PIDAHI SECONDARY RATIO
-o433_df |> subset(Nacionalidad == 2 & Colegio == 9, select = c('Grado_Escolar')) |> table()
-## TABLE Ciudad_residencia guadalajara
-## NOTE 8 IS SECONDARY GUADALAJARA
-o433_df |> subset(Ciudad_Residencia == 6 & Nacionalidad == 2, select = c('Grado_Escolar', 'Sexo.', 'Colegio')) |> table()
-#################################################
-## COUNTS OF SCHOOL OBSERVATIONS IN CONTRU 2 (MEXICO)
-o433_df |> subset(Nacionalidad == 2, select = c('Colegio')) |> table()
+## ACTIVITY SAME ANALYSIS AS ABOVE BUT THE ACTIVITIES ARE TAKEN AS CATEFORIES FOR  DIFFERENCE ANALYSES
+res_activity_diff <- regression_significant_main(oactivity_factored_df, joint_nums, varnames_activity, significance_threshold = 0.041, r_min_threshold = 0, make_graphics = TRUE, opacity = 0.7, save_graph_to = 'o433activiy_diff.pdf', scatter_cats = FALSE)
+## RENAME THE CATEGORICAL ACTIVITY GRID OF PLOT FOR EASY REFERENCE LATER
+actdiffgrid <- res_activity_diff[['grid']]
+actdiffsiglength <- length(res_activity_diff[['plots']])
