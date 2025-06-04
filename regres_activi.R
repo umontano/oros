@@ -2,7 +2,9 @@
 if(!exists('regression_significant_main')) source('https://raw.githubusercontent.com/umontano/regression/refs/heads/main/sig_graph.R')
 ## LOAD CSV DATABASE
 if(!exists('o433_df')) o433_df <- read.csv('https://raw.githubusercontent.com/umontano/oros/refs/heads/main/o433.csv')
-physical_activity_info_df <- read.csv('https://github.com/umontano/oros/raw/main/activi.csv', header = TRUE, stringsAsFactors = FALSE, sep = ',')
+physical_activity_info_df <- read.csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vT43l0HTsz_Dp2v-KDWSP74NGVrZSr-D9-_PQeS1mwzFIj99iQ9W_2cCLEMnZBP2gU3vOjB2ZEBwanA/pub?gid=301120183&single=true&output=csv', stringsAsFactors = FALSE, header = TRUE)
+
+
 
 ## INSTALL LIBRARIES IF NOT INSTALLED, AND LOAD THEM
 packages <- c(
